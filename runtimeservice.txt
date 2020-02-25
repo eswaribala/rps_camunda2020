@@ -1,0 +1,27 @@
+@SpringBootApplication
+//@EnableProcessApplication("visaprocess")
+public class CamundaApplication {
+	private static final String PROCESS_DEFINITION_KEY = "visaprocess";
+  public static void main(String... args) {
+    SpringApplication.run(CamundaApplication.class, args);
+  }
+  private final Logger logger = LoggerFactory.getLogger(CamundaApplication.class);
+
+  @Autowired
+  private RuntimeService runtimeService;
+
+  @Autowired
+  private HistoryService historyService;
+
+  @EventListener
+  public void onStart(final ProcessApplicationStartedEvent event) {
+	  ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
+	  Map<String, Object> variables = new HashMap<String, Object>();
+	    variables.put("player", "Sachin");    
+	    ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(PROCESS_DEFINITION_KEY,
+	    	      putValue("player","sachin"));
+	    	       
+
+    logger.info("start instance: {}", processInstance.getId());
+  }
+}
